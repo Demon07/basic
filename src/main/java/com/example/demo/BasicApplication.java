@@ -14,13 +14,15 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.context.support.ServletRequestHandledEvent;
+
+import com.example.demo.bean.FooProperties;
+import com.example.demo.bean.TaijCongfiguration;
 
 
 
@@ -30,8 +32,14 @@ public class BasicApplication {
 	private static final Logger log = LoggerFactory.getLogger(BasicApplication.class);
 	
 	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(BasicApplication.class, args);
+		 SpringApplication.run(BasicApplication.class, args);
 	}
+	
+	@Autowired
+	private FooProperties fooProperties;
+	
+	@Autowired
+	private TaijCongfiguration taijCongfiguration;
 	
 	@Bean
 	public CommandLineRunner runner() {
@@ -58,6 +66,7 @@ public class BasicApplication {
 				System.out.println(args.getOptionValues(opt).stream().collect(Collectors.joining(",", "[", "]")));
 				// String.join(",", args.getOptionValues(opt));
 			System.out.println("dataSource:"+dataSource);
+			System.out.println(taijCongfiguration.toString());
 			}
 		};
 	}
