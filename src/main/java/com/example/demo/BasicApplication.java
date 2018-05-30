@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.support.ServletRequestHandledEvent;
 
 import com.example.demo.bean.FooProperties;
@@ -100,11 +101,13 @@ public class BasicApplication {
 	public HealthIndicator myHealth() {
 		return () -> {
 //			return Health.up().build();
-			int m = (int)(Math.random()*1000+9000);
-			if (m%2==0) {
+			RestTemplate restTemplate = new RestTemplate();
+			try {
+				String string = restTemplate.getForObject("https://www.baidu.com", String.class);
+				System.out.println(string);
 				return Health.up().build();
-			} else {
-				return Health.down().withDetail("Error Code", m).build();
+			} catch (Exception e) {
+				return Health.down().withDetail("Error Code", 404).build();
 			}
 		};
 	}
